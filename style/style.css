@@ -13,6 +13,7 @@ nav {
 .navbar-brand img,
 .navbar-brand,
 .nav-container {
+    cursor: pointer;
     height: 38px;
 }
 
@@ -22,6 +23,7 @@ nav {
 }
 
 h1 {
+    text-transform: capitalize;
     font-weight: 700;
     letter-spacing: 0.25px;
     font-size: 1rem;
@@ -80,7 +82,7 @@ small {
     font-size: 1.125rem;
 }
 
-.col-md-4 {
+.weather {
     padding: 0;
     background-color: #323544
 }
@@ -97,6 +99,25 @@ small {
 #thirdDay {
     border-top-right-radius: .625rem;
     border-bottom-right-radius: .625rem;
+}
+
+#weatherPage,
+#newsPage,
+#contactPage {
+    display: none;
+}
+
+.weather-page #home,
+.news-page #news,
+.contact-page #contact {
+    border-color: #009ad8;
+    color: #009ad8;
+}
+
+.weather-page #weatherPage,
+.news-page #newsPage,
+.contact-page #contactPage {
+    display: block;
 }
 
 i {
@@ -211,4 +232,24 @@ li.active>.nav-link {
     padding: 5px 25px !important;
     font-size: 14px;
     color: white;
+}
+
+#newsPage {
+    padding-top: 150px;
+}
+
+.newsimg {
+    height: 300px;
+    margin-bottom: .625rem;
+}
+
+.fa-external-link-alt {
+    top: 5px;
+    right: 5px;
+    font-size: 14px;
+    color: white;
+}
+
+.fa-external-link-alt:hover {
+    color: black;
 }

@@ -8,8 +8,10 @@ const weatherPage = document.getElementById('weatherPage');
 const newsPage = document.getElementById('newsPage');
 const active = document.querySelector('li.nav-item.active a');
 const news = document.getElementById('news');
-const home = document.getElementById('home');
+const home = document.getElementById('weather');
 const contact = document.getElementById('contact');
+const searchLabel = document.getElementById('searchLabel');
+const header = document.getElementById('header')
 const directions = {
     "N": "North",
     "E": "East",
@@ -17,37 +19,51 @@ const directions = {
     "S": "South"
 }
 
-active.addEventListener('change', () => {
-    activeChange()
+//Search bar for location
+searchBar.addEventListener('keyup', () => {
+    placeholderFix();
+    if (home.classList.contains('active')) {
+        getWeather(searchBar.value);
+    } else {
+        getNews(searchBar.value);
+    }
+});
+
+news.addEventListener('click', () => {
+    searchBar.value = ''
+    placeholderFix();
+    searchLabel.innerHTML = 'Search by Country code (us-gb-eg)'
+});
+home.addEventListener('click', () => {
+    searchBar.value = ''
+    placeholderFix();
+    searchLabel.innerHTML = 'Search City or Zip Code'
 })
 
-function activeChange() {
-    if (active.innerHTML.includes('Home')) {
-        newsPage.classList.replace('d-block', 'd-none');
-        contactPage.classList.replace('d-block', 'd-none')
-        weatherPage.classList.replace('d-none', 'd-block');
-    } else if (active.innerHTML.includes('News')) {
-        contactPage.classList.replace('d-block', 'd-none')
-        weatherPage.classList.replace('d-block', 'd-none');
-        newsPage.classList.replace('d-none', 'd-block');
-    } else if (active.innerHTML.includes('Contact')) {
-        contactPage.classList.replace('d-none', 'd-block');
-        weatherPage.classList.replace('d-block', 'd-none');
-        newsPage.classList.replace('d-block', 'd-none');
+//Input animation for the search bar
+function placeholderFix() {
+    if (searchBar.value == '' || searchBar.value == null) {
+        animationSelector.classList.remove('span-animation');
+    } else {
+        animationSelector.classList.add('span-animation');
     }
 }
-
 //Navigation selector
-let navElements = [home, news, contact]
-
+const classes = ['weather-page', 'news-page', 'contact-page']
+document.querySelectorAll('li.nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+        document.body.classList.remove(...classes);
+        document.body.classList.add(`${el.id}-page`);
+        header.innerText = `${el.id}`;
+    })
+})
+const navElements = [home, news, contact]
 navElements.forEach(nav => {
     nav.addEventListener('click', () => {
         document.querySelectorAll('.active').forEach(notNav => {
             notNav.classList.remove('active');
-            `${notNav}Page`.classList.replace('d-block', 'd-none');
         });
         nav.classList.add('active');
-        `${nav}Page`.classList.replace('d-none', 'd-block');
     });
 });
 
@@ -57,12 +73,6 @@ let currentLocation = (async function getLocation() {
     let response = await location.json();
     return response.city;
 }())
-
-//Search bar for location
-searchBar.addEventListener('keyup', () => {
-    placeholderFix();
-    getWeather(searchBar.value);
-});
 
 //Main page content (Weather api call + data displaying)
 async function getWeather(city) {
@@ -118,19 +128,35 @@ async function getWeather(city) {
 }
 getWeather();
 
-//Input animation for the search bar
-function placeholderFix() {
-    if (searchBar.value == '' || searchBar.value == null) {
-        animationSelector.classList.remove('span-animation');
-    } else {
-        animationSelector.classList.add('span-animation');
-    }
-}
 
-
-async function getNews() {
-    let newsUrl = await fetch(`https://newsapi.org/v2/everything?q=news+country=en&apiKey=a8f90813d0644452892ddd7cb923aff3`)
-    let newsResponse = await newsUrl.json()
+//News page (second page)
+async function getNews(country) {
+    let newsUrl = await fetch(`https://newsapi.org/v2/top-headlines?country=${country?country:'us'}&apiKey=a8f90813d0644452892ddd7cb923aff3`);
+    let newsResponse = await newsUrl.json();
     console.log(newsResponse);
+    let newsBody = ``;
+    let arrayLength = newsResponse.articles.length - (newsResponse.articles.length % 3);
+    let desc;
+    for (let i = 0; i < arrayLength; i++) {
+        if (newsResponse.articles[i].description) {
+            desc = newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description);
+        } else if (newsResponse.articles[i].content) {
+            desc = newsResponse.articles[i].content.split(' ').length > 15 ? newsResponse.articles[i].content.split(' ').splice(0, 15).join(' ') + '...' : newsResponse.articles[i].content;
+        } else {
+            desc = '';
+        }
+        newsBody += `
+        <div class="col-md-4" dir="auto">
+        <a target="_blank" href="${newsResponse.articles[i].url}" class="position-relative d-inline-block">
+        <i class="fas fa-external-link-alt position-absolute"></i>
+        <img src="${newsResponse.articles[i].urlToImage ? newsResponse.articles[i].urlToImage : '../images/news-default.jpeg'}" onerror="this.src='../images/news-default.jpeg';" class="w-100 newsimg" alt="">
+        </a>
+        <h4 class="title text-white">
+        ${newsResponse.articles[i].title.split(' ').length> 5 ? newsResponse.articles[i].title.split(' ').splice(0, 5).join(' ') + '...': newsResponse.articles[i].title}
+        </h4>
+        <p class="description">${desc}</p>
+    </div>`;
+    }
+    document.getElementById('newsPageRow').innerHTML = newsBody;
 }
 getNews()

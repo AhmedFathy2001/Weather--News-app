@@ -13,13 +13,13 @@
     <script src="./scripts/script.js" defer></script>
 </head>
 
-<body>
+<body class="weather-page">
     <nav class="navbar navbar-expand-lg">
         <div class="container nav-container">
-            <div class="navbar-brand d-flex" href="index.html">
+            <div class="navbar-brand d-flex" onclick="window.location.href = 'index.html'">
                 <img src="./images/logo.png" alt="logo">
                 <div class="logo-text d-flex flex-column">
-                    <h1 class="text-white mb-1">Weather</h1>
+                    <h1 class="text-white mb-1" id="header">Weather</h1>
                     <small>tagline goes here</small>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active" id="home">
+                    <li class="nav-item active" id="weather">
                         <a class="nav-link">Home</a>
                     </li>
                     <li class="nav-item" id="news">
@@ -45,25 +45,27 @@
     <div class="bg-img"></div>
     <div class="container position-relative d-flex justify-content-center search-container">
         <input type="search" name="searchbar" class="rounded-pill form-control" id="searchBar">
-        <label for="searchBar" class="placeholderr span-animation-selector">Search City or Zip Code</label>
+        <label for="searchBar" class="placeholderr span-animation-selector" id="searchLabel">Search City or Zip Code</label>
     </div>
-    <div class="container d-block" id="weatherPage">
+    <div class="container" id="weatherPage">
         <div class="row">
-            <div class="col-md-4" id="firstDay">
+            <div class="col-md-4 weather" id="firstDay">
 
             </div>
-            <div class="col-md-4" id="secondDay">
+            <div class="col-md-4 weather" id="secondDay">
 
             </div>
-            <div class="col-md-4" id="thirdDay">
+            <div class="col-md-4 weather" id="thirdDay">
 
             </div>
         </div>
     </div>
-    <div class="container d-none" id="newsPage">
+    <div class="container" id="newsPage">
+        <div class="row" id="newsPageRow">
 
+        </div>
     </div>
-    <div class="container d-none" id="contactPage">
+    <div class="container" id="contactPage">
 
     </div>
 </body>
