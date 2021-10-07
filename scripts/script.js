@@ -71,7 +71,7 @@ navElements.forEach(nav => {
 
 //API to get user's location and set it to the Weather/News api links
 let currentLocation = (async function getLocation() {
-    let location = await fetch('https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey=at_hEQr673QMXBK0jam9poHZzE0Sv6Qx');
+    let location = await fetch('https://ipapi.co/json/');
     let response = await location.json();
     return response.city;
 }())
