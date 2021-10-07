@@ -131,7 +131,8 @@ getWeather();
 
 //News page (second page)
 async function getNews(country) {
-    let newsUrl = await fetch(`https://newsapi.org/v2/top-headlines?country=${country?country:'us'}&apiKey=a8f90813d0644452892ddd7cb923aff3`);
+
+    let newsUrl = await fetch(`https://gnews.io/api/v4/search?q=example&token=113d984ca8886fd44b593a3bca50ccbd`);
     let newsResponse = await newsUrl.json();
     console.log(newsResponse);
     let newsBody = ``;
