@@ -71,14 +71,14 @@ navElements.forEach(nav => {
 
 //API to get user's location and set it to the Weather/News api links
 let currentLocation = (async function getLocation() {
-    let location = await fetch('http://api.ipstack.com/check?access_key=4810164588e24eafb6856c7fbdb944be');
+    let location = await fetch('https://api.ipstack.com/check?access_key=4810164588e24eafb6856c7fbdb944be');
     let response = await location.json();
     return response.city;
 }())
 
 //Main page content (Weather api call + data displaying)
 async function getWeather(city) {
-    let url = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation}&days=3&aqi=no&alerts=no`)
+    let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation}&days=3&aqi=no&alerts=no`)
     let response = await url.json()
     dayOne.innerHTML = `
 <div class="header-first d-flex justify-content-between p-2">
