@@ -25,7 +25,9 @@ searchBar.addEventListener('keyup', () => {
     if (home.classList.contains('active')) {
         getWeather(searchBar.value);
     } else {
-        getNews(searchBar.value);
+        setTimeout(() => {
+            getNews(searchBar.value);
+        }, 100)
     }
 });
 
@@ -128,29 +130,67 @@ async function getWeather(city) {
 }
 getWeather();
 
+let x = {
+    'Australia': 'au',
+    'Brazil': 'br',
+    'Canada': 'ca',
+    'Switzerland': 'ch',
+    'China': 'cn',
+    'Germany': 'de',
+    'Egypt': 'eg',
+    'Spain': 'es',
+    'France': 'fr',
+    'United Kingdom': 'gb',
+    'Greece': 'gr',
+    'Hong Kong': 'hk',
+    'Ireland': 'ie',
+    'India': 'in',
+    'Italy': 'it',
+    'Japan': 'jp',
+    'Netherlands': 'nl',
+    'Norway': 'no',
+    'Peru': 'pe',
+    'Philippines': 'ph',
+    'Pakistan': 'pk',
+    'Portugal': 'pt',
+    'Romania': 'ro',
+    'Russian Federation': 'ru',
+    'Sweden': 'se',
+    'Singapore': 'sg',
+    ' Taiwan, Province of China ': 'tw',
+    'Ukraine': 'ua',
+    'United States': 'us'
+}
 
 //News page (second page)
 async function getNews(country) {
-
-    let newsUrl = await fetch(`https://gnews.io/api/v4/search?q=example&token=113d984ca8886fd44b593a3bca50ccbd`);
+    //https://gnews.io/api/v4/search?q=example&country=${country?country:'us'}&token=113d984ca8886fd44b593a3bca50ccbd
+    let newsUrl = await fetch(
+        `https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us'}&topic=news&page_size=18`, {
+            method: "GET",
+            headers: {
+                'x-api-key': 'Ua6VFllK-YGUHaAf1rU_yLK3RIohjhSpjHToM36BYkc'
+            }
+        }
+    );
     let newsResponse = await newsUrl.json();
     console.log(newsResponse);
     let newsBody = ``;
     let arrayLength = newsResponse.articles.length - (newsResponse.articles.length % 3);
     let desc;
     for (let i = 0; i < arrayLength; i++) {
-        if (newsResponse.articles[i].description) {
-            desc = newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description);
-        } else if (newsResponse.articles[i].content) {
-            desc = newsResponse.articles[i].content.split(' ').length > 15 ? newsResponse.articles[i].content.split(' ').splice(0, 15).join(' ') + '...' : newsResponse.articles[i].content;
+        if (newsResponse.articles[i].summary) {
+            desc = newsResponse.articles[i].summary.split(' ').length > 15 ? newsResponse.articles[i].summary.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].summary);
+        } else if (newsResponse.articles[i].excerpt) {
+            desc = newsResponse.articles[i].excerpt.split(' ').length > 15 ? newsResponse.articles[i].excerpt.split(' ').splice(0, 15).join(' ') + '...' : newsResponse.articles[i].excerpt;
         } else {
             desc = '';
         }
         newsBody += `
         <div class="col-md-4" dir="auto">
-        <a target="_blank" href="${newsResponse.articles[i].url}" class="position-relative d-inline-block">
+        <a target="_blank" href="${newsResponse.articles[i].link}" class="position-relative d-inline-block">
         <i class="fas fa-external-link-alt position-absolute"></i>
-        <img src="${newsResponse.articles[i].urlToImage ? newsResponse.articles[i].urlToImage : '../images/news-default.jpeg'}" onerror="this.src='../images/news-default.jpeg';" class="w-100 newsimg" alt="">
+        <img src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.jpeg'}" onerror="this.src='../images/news-default.jpeg';" class="w-100 newsimg" alt="">
         </a>
         <h4 class="title text-white">
         ${newsResponse.articles[i].title.split(' ').length> 5 ? newsResponse.articles[i].title.split(' ').splice(0, 5).join(' ') + '...': newsResponse.articles[i].title}
