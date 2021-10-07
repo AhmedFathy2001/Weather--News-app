@@ -174,7 +174,6 @@ async function getNews(country) {
         }
     );
     let newsResponse = await newsUrl.json();
-    console.log(newsResponse);
     let newsBody = ``;
     let arrayLength = newsResponse.articles.length - (newsResponse.articles.length % 3);
     let desc;
