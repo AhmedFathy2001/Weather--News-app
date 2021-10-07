@@ -71,7 +71,7 @@ navElements.forEach(nav => {
 
 //API to get user's location and set it to the Weather/News api links
 let currentLocation = (async function getLocation() {
-    let location = await fetch('https://api.ipstack.com/check?access_key=4810164588e24eafb6856c7fbdb944be');
+    let location = await fetch('http://api.ipstack.com/check?access_key=4810164588e24eafb6856c7fbdb944be');
     let response = await location.json();
     return response.city;
 }())
