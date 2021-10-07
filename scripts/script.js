@@ -68,17 +68,23 @@ navElements.forEach(nav => {
         nav.classList.add('active');
     });
 });
-
-//API to get user's location and set it to the Weather/News api links
+const x = [{
+        'country': ''
+    }, {
+        'city': ''
+    }]
+    //API to get user's location and set it to the Weather/News api links
 let currentLocation = (async function getLocation() {
-    let location = await fetch('https://ipapi.co/json/');
-    let response = await location.json();
-    return response.city;
-}())
-
-//Main page content (Weather api call + data displaying)
+        let location = await fetch('https://ipapi.co/json/');
+        let response = await location.json();
+        // x['country'] = response.country;
+        // x['city'] = response.city;
+        return response.city;
+    }())
+    //Main page content (Weather api call + data displaying)
 async function getWeather(city) {
-    let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation}&days=3&aqi=no&alerts=no`)
+    console.log(x['city']);
+    let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation/* x['city']*/}&days=3&aqi=no&alerts=no`)
     let response = await url.json()
     dayOne.innerHTML = `
 <div class="header-first d-flex justify-content-between p-2">
@@ -130,43 +136,12 @@ async function getWeather(city) {
 }
 getWeather();
 
-let x = {
-    'Australia': 'au',
-    'Brazil': 'br',
-    'Canada': 'ca',
-    'Switzerland': 'ch',
-    'China': 'cn',
-    'Germany': 'de',
-    'Egypt': 'eg',
-    'Spain': 'es',
-    'France': 'fr',
-    'United Kingdom': 'gb',
-    'Greece': 'gr',
-    'Hong Kong': 'hk',
-    'Ireland': 'ie',
-    'India': 'in',
-    'Italy': 'it',
-    'Japan': 'jp',
-    'Netherlands': 'nl',
-    'Norway': 'no',
-    'Peru': 'pe',
-    'Philippines': 'ph',
-    'Pakistan': 'pk',
-    'Portugal': 'pt',
-    'Romania': 'ro',
-    'Russian Federation': 'ru',
-    'Sweden': 'se',
-    'Singapore': 'sg',
-    ' Taiwan, Province of China ': 'tw',
-    'Ukraine': 'ua',
-    'United States': 'us'
-}
-
 //News page (second page)
 async function getNews(country) {
+    console.log(x['country']);
     //https://gnews.io/api/v4/search?q=example&country=${country?country:'us'}&token=113d984ca8886fd44b593a3bca50ccbd
     let newsUrl = await fetch(
-        `https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us'}&topic=news&page_size=18`, {
+        `https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us' /*await x['country']*/}&topic=news&page_size=18`, {
             method: "GET",
             headers: {
                 'x-api-key': 'Ua6VFllK-YGUHaAf1rU_yLK3RIohjhSpjHToM36BYkc'
