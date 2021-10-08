@@ -423,7 +423,7 @@ li.active-nav>.nav-link {
     color: #bfc1c8;
 }
 
-.map-style a {
+.map-style a:hover {
     text-decoration: underline;
     color: white;
 }
