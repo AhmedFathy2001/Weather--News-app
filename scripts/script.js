@@ -14,6 +14,7 @@ const searchLabel = document.getElementById('searchLabel');
 const header = document.getElementById('header');
 const inputs = document.querySelectorAll('input.input-selector');
 const textareaDesc = document.getElementById('desc');
+const navBtn = document.getElementById('btnToggler');
 const directions = {
     "N": "North",
     "E": "East",
@@ -37,15 +38,24 @@ if (session == 'weather') {
     header.innerText = 'contact';
 }
 
-//Nav bar X animation
-function menuToggle(active) {
-    active.classList.toggle("change");
+//debounce (delays function calls)
+function debounce(func, timeout = 300) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
 }
 
-function menuActiveToggle(active) {
-    active.classList.toggle("active")
-    document.getElementById('btnToggler').classList.toggle("change")
-}
+//Nav bar X animation
+navBtn.addEventListener('click', () => {
+    if (navBtn.classList.contains('collapsed')) {
+        navBtn.classList.remove('change')
+    } else {
+        navBtn.classList.add('change');
+    }
+
+});
 
 //API to get user's location and set it to the Weather/News api links
 let currentLocation = (async function getLocation() {
@@ -54,17 +64,17 @@ let currentLocation = (async function getLocation() {
     return response.city;
 }());
 
+
+
 //Search bar for location
-searchBar.addEventListener('keyup', () => {
+searchBar.addEventListener("keyup", debounce(() => {
     placeholderFix();
     if (document.body.classList.contains('weather-page')) {
         getWeather(searchBar.value);
     } else {
-        setTimeout(() => {
-            getNews(searchBar.value);
-        }, 100)
+        getNews(searchBar.value);
     }
-});
+}));
 
 //Input animation for the search bar
 function placeholderFix() {
@@ -85,7 +95,7 @@ home.addEventListener('click', () => {
     searchBar.value = ''
     placeholderFix();
     searchLabel.innerHTML = 'Search City or Zip Code'
-})
+});
 contact.addEventListener('click', () => {
     inputs.forEach(element => {
         element.value = '';
@@ -189,7 +199,7 @@ async function getNews(country) {
             desc = '';
         }
         newsBody += `
-        <div class="col-md-4" dir="auto">
+        <div class="col-md-6 col-lg-4" dir="auto">
         <a target="_blank" href="${newsResponse.articles[i].link}" class="position-relative d-inline-block w-100">
         <i class="fas fa-external-link-alt position-absolute"></i>
         <img src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.jpeg'}" onerror="this.src='../images/news-default.jpeg';" class="w-100 newsimg" alt="">
@@ -232,9 +242,9 @@ function textareaPlaceholder() {
 
 textareaDesc.addEventListener('keyup', () => {
     textareaPlaceholder()
-})
+});
 inputs.forEach(element => {
     element.addEventListener('keyup', () => {
         contactPlaceholder(element);
     })
-})
+});
