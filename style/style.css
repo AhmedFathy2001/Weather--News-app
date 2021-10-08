@@ -423,6 +423,11 @@ li.active-nav>.nav-link {
     color: #bfc1c8;
 }
 
+.map-style a {
+    text-decoration: underline;
+    color: white;
+}
+
 .map-style i {
     margin-right: 5px;
     color: #09AADB;
