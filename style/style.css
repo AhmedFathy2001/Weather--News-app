@@ -208,9 +208,9 @@ small {
     transition: 1s;
 }
 
-.weather-page #weather a,
-.news-page #news a,
-.contact-page #contact a {
+.weather-page #weather .nav-link,
+.news-page #news .nav-link,
+.contact-page #contact .nav-link {
     border-color: #009ad8;
     color: #009ad8;
 }

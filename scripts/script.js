@@ -208,9 +208,9 @@ async function getNews(country) {
         }
         newsBody += `
         <div class="col-md-6 col-lg-4" dir="auto">
-        <a target="_blank" href="${newsResponse.articles[i].link}" class="position-relative d-inline-block w-100">
+        <a target="_blank" href="${newsResponse.articles[i].link}  rel="noopener"" class="position-relative d-inline-block w-100">
         <i class="fas fa-external-link-alt position-absolute"></i>
-        <img src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.webp'}" alt="news thumbnail" onerror="this.src='../images/news-default.webp';" class="w-100 newsimg">
+        <img loading="lazy" src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.webp'}" alt="news thumbnail" onerror="this.src='../images/news-default.webp';" class="w-100 newsimg">
         </a>
         <h4 class="title text-white">
         ${newsResponse.articles[i].title.split(' ').length> 5 ? newsResponse.articles[i].title.split(' ').splice(0, 5).join(' ') + '...': newsResponse.articles[i].title}
