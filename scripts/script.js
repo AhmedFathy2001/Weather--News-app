@@ -115,8 +115,8 @@ async function getWeather(city) {
     let response = await url.json()
     dayOne.innerHTML = `
 <div class="header-first d-flex justify-content-between p-2">
-    <span>${new Date(response.current.last_updated).toLocaleString("default", { weekday: "long" })}</span>
-    <span>${new Date(response.current.last_updated).toLocaleString("en-GB",{day:'numeric',month:'long'})}</span>
+    <span>${new Date().toLocaleString("default", { weekday: "long" })}</span>
+    <span>${new Date().toLocaleString("en-GB",{day:'numeric',month:'long'})}</span>
 </div>
 <div class="body-first py-4 px-3">
     <p class="location">${response.location.name}, ${response.location.country}</p>
@@ -168,8 +168,9 @@ async function getNews(country) {
     //https://gnews.io/api/v4/search?q=example&country=${country?country:'us'}&token=113d984ca8886fd44b593a3bca50ccbd 
     //${newsResponse.articles[i].image ? newsResponse.articles[i].image : '../images/news-default.jpeg'}
     //newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description)
+    //http://api.mediastack.com/v1/news?access_key=276d4bf09ab35e2c1b6006ff65215f01&countries=${country?country:'us'}
 
-    let newsUrl = await fetch(`https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us' /*await x['country']*/}&topic=news&lang=en&page_size=18`, {
+    let newsUrl = await fetch(`https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us'}&topic=news&lang=en&page_size=18`, {
         method: "GET",
         headers: {
             'x-api-key': 'DBkfmuLb8i0lMy0BBETwAq2GHVPPYIMJhvxwEB9j6oA'
