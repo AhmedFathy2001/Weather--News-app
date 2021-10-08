@@ -32,10 +32,13 @@ if (session == 'weather') {
     document.body.classList.remove(...classes);
     document.body.classList.add('news-page');
     header.innerText = 'news';
+    document.title = 'News'
+    searchLabel.innerHTML = 'Search by Country code (us-gb-eg)'
 } else {
     document.body.classList.remove(...classes);
     document.body.classList.add('contact-page');
     header.innerText = 'contact';
+    document.title = 'Contact'
 }
 
 //debounce (delays function calls)
@@ -61,7 +64,11 @@ navBtn.addEventListener('click', () => {
 let currentLocation = (async function getLocation() {
     let location = await fetch('https://ipapi.co/json/');
     let response = await location.json();
-    return response.city ? response.city : 'alexandria';
+    let responseObj = {
+        'reponseCity':`${response.city?response.city:'alexandria'}`,
+        'responseCountry':`${response.country?response.country:'eg'}`
+    }
+    return responseObj;
 }());
 
 
@@ -84,6 +91,7 @@ function placeholderFix() {
         animationSelector.classList.add('span-animation');
     }
 }
+
 
 //Event listeners to reset inputs on page change
 news.addEventListener('click', () => {
@@ -121,7 +129,7 @@ document.querySelectorAll('li.nav-item').forEach(el => {
 
 //Main page content (Weather api call + data displaying)
 async function getWeather(city) {
-    let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation/* x['city']*/}&days=3&aqi=no&alerts=no`)
+    let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : (await currentLocation).reponseCity}&days=3&aqi=no&alerts=no`)
     let response = await url.json();
     dayOne.innerHTML = `
 <div class="header-first d-flex justify-content-between p-2">
@@ -179,7 +187,7 @@ async function getNews(country) {
     //${newsResponse.articles[i].image ? newsResponse.articles[i].image : '../images/news-default.jpeg'}
     //newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description)
     //http://api.mediastack.com/v1/news?access_key=276d4bf09ab35e2c1b6006ff65215f01&countries=${country?country:'us'}
-    let newsUrl = await fetch(`https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us'}&topic=news&lang=en&page_size=18`, {
+    let newsUrl = await fetch(`https://api.newscatcherapi.com/v2/latest_headlines?countries=${country? country : (await currentLocation).responseCountry}&topic=news&page_size=18`, {
         method: "GET",
         headers: {
             'x-api-key': 'DBkfmuLb8i0lMy0BBETwAq2GHVPPYIMJhvxwEB9j6oA'
