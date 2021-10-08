@@ -351,6 +351,7 @@ li.active-nav>.nav-link {
 }
 
 .nav-link {
+    cursor: pointer;
     border-radius: 30px;
     border: 2px solid transparent;
     padding: 5px 25px !important;
@@ -562,7 +563,7 @@ footer .col-lg-3 a i {
         background: #262936;
         text-align: center;
     }
-    #navbarNav ul li a {
+    #navbarNav ul li .nav-link {
         padding: 20px !important;
         border-radius: 0;
         border: none;
