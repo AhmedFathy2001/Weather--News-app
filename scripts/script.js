@@ -23,23 +23,7 @@ const directions = {
 }
 const session = sessionStorage.getItem('page') ? sessionStorage.getItem('page') : 'weather';
 const classes = ['weather-page', 'news-page', 'contact-page'];
-
-//Sets the web page on the same page you refreshed on || resets on any other tab (for accurate SPA concept)
-if (session == 'weather') {
-    document.body.classList.remove(...classes);
-    document.body.classList.add('weather-page');
-} else if (session == 'news') {
-    document.body.classList.remove(...classes);
-    document.body.classList.add('news-page');
-    header.innerText = 'news';
-    document.title = 'News'
-    searchLabel.innerHTML = 'Search by Country code (us-gb-eg)'
-} else {
-    document.body.classList.remove(...classes);
-    document.body.classList.add('contact-page');
-    header.innerText = 'contact';
-    document.title = 'Contact'
-}
+let x = false
 
 //debounce (delays function calls)
 function debounce(func, timeout = 300) {
@@ -71,6 +55,23 @@ let currentLocation = (async function getLocation() {
     return responseObj;
 }());
 
+//Sets the web page on the same page you refreshed on || resets on any other tab (for accurate SPA concept)
+if (session == 'weather') {
+    document.body.classList.remove(...classes);
+    document.body.classList.add('weather-page');
+} else if (session == 'news') {
+    document.body.classList.remove(...classes);
+    document.body.classList.add('news-page');
+    header.innerText = 'news';
+    document.title = 'News'
+    searchLabel.innerHTML = 'Search by Country code (us-gb-eg)'
+    getNews();
+} else {
+    document.body.classList.remove(...classes);
+    document.body.classList.add('contact-page');
+    header.innerText = 'contact';
+    document.title = 'Contact'
+}
 
 
 //Search bar for location
@@ -98,7 +99,14 @@ news.addEventListener('click', () => {
     searchBar.value = ''
     placeholderFix();
     searchLabel.innerHTML = 'Search by Country code (us-gb-eg)'
+    
 });
+//fetches news api only when the news is active
+if(!x){
+news.addEventListener('click',()=>{
+    getNews();
+},{ once: true });
+}
 home.addEventListener('click', () => {
     searchBar.value = ''
     placeholderFix();
@@ -219,8 +227,12 @@ async function getNews(country) {
     </div>`;
     }
     document.getElementById('newsPageRow').innerHTML = newsBody;
+
+    //to prevent rerunning the function when refreshing on news page
+    x = true;
+    return x;
 }
-getNews();
+
 
 //goes to the home page on click of the link without refreshing the page
 function goHome() {
