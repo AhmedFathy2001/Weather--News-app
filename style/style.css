@@ -478,9 +478,9 @@ textarea:focus+.textarea-placeholder,
 .span-animation1,
 .textarea-animation {
     opacity: 1 !important;
-    -webkit-transform: scale(.95) translateY(-190%) translateX(-10px);
-    -ms-transform: scale(.95) translateY(-190%) translateX(-10px);
-    transform: scale(.95) translateY(-190%) translateX(-10px);
+    -webkit-transform: scale(.95) translateY(-200%) translateX(-10px);
+    -ms-transform: scale(.95) translateY(-200%) translateX(-10px);
+    transform: scale(.95) translateY(-200%) translateX(-10px);
 }
 
 .btn-color {
