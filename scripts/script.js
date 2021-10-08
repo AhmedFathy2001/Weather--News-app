@@ -61,7 +61,7 @@ navBtn.addEventListener('click', () => {
 let currentLocation = (async function getLocation() {
     let location = await fetch('https://ipapi.co/json/');
     let response = await location.json();
-    return response.city;
+    return response.city ? response.city : 'alexandria';
 }());
 
 
@@ -122,7 +122,7 @@ document.querySelectorAll('li.nav-item').forEach(el => {
 //Main page content (Weather api call + data displaying)
 async function getWeather(city) {
     let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation/* x['city']*/}&days=3&aqi=no&alerts=no`)
-    let response = await url.json()
+    let response = await url.json();
     dayOne.innerHTML = `
 <div class="header-first d-flex justify-content-between p-2">
     <span>${new Date().toLocaleString("default", { weekday: "long" })}</span>
@@ -132,7 +132,7 @@ async function getWeather(city) {
     <p class="location">${response.location.name}, ${response.location.country}</p>
     <div class="currentweather d-flex justify-content-between">
         <span class="degree">${response.current.temp_c}°C</span>
-        <span class="status-img"><img class="w-100" src="${response.current.condition.icon}" alt=""></span>
+        <span class="status-img"><img class="w-100" src="${response.current.condition.icon}" alt="weather condition"></span>
     </div>
     <div class="footer">
         <p class="status">${response.current.condition.text}</p>
@@ -147,7 +147,7 @@ async function getWeather(city) {
     <p class="mb-0">${new Date(response.forecast.forecastday[1].date).toLocaleString("default", { weekday: "long" })}</p>
 </div>
 <div class="body-mid pb-2 px-3 rounded-0">
-        <span class="status-img-other mb-4 d-flex justify-content-center"><img src="${response.forecast.forecastday[1].day.condition.icon}" alt=""></span>
+        <span class="status-img-other mb-4 d-flex justify-content-center"><img src="${response.forecast.forecastday[1].day.condition.icon}" alt="weather condition day one"></span>
     <div class="currentweather d-flex align-items-center flex-column mb-3">
         <div class ="maxtemp text-white">${response.forecast.forecastday[1].day.maxtemp_c}°C</div>
         <div class ="mintemp">${response.forecast.forecastday[1].day.mintemp_c}°</div>
@@ -161,7 +161,7 @@ async function getWeather(city) {
     <p class="mb-0">${new Date(response.forecast.forecastday[2].date).toLocaleString("default", { weekday: "long" })}</p>
 </div>
 <div class="body-last pb-2 px-3 adjustments">
-        <span class="status-img-other mb-4 d-flex justify-content-center"><img src="${response.forecast.forecastday[2].day.condition.icon}" alt=""></span>
+        <span class="status-img-other mb-4 d-flex justify-content-center"><img src="${response.forecast.forecastday[2].day.condition.icon}" alt="weather condition day two"></span>
     <div class="currentweather d-flex align-items-center flex-column mb-3">
         <div class ="maxtemp text-white">${response.forecast.forecastday[2].day.maxtemp_c}°C</div>
         <div class ="mintemp">${response.forecast.forecastday[2].day.mintemp_c}°</div>
@@ -179,7 +179,6 @@ async function getNews(country) {
     //${newsResponse.articles[i].image ? newsResponse.articles[i].image : '../images/news-default.jpeg'}
     //newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description)
     //http://api.mediastack.com/v1/news?access_key=276d4bf09ab35e2c1b6006ff65215f01&countries=${country?country:'us'}
-
     let newsUrl = await fetch(`https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us'}&topic=news&lang=en&page_size=18`, {
         method: "GET",
         headers: {
@@ -202,7 +201,7 @@ async function getNews(country) {
         <div class="col-md-6 col-lg-4" dir="auto">
         <a target="_blank" href="${newsResponse.articles[i].link}" class="position-relative d-inline-block w-100">
         <i class="fas fa-external-link-alt position-absolute"></i>
-        <img src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.jpeg'}" onerror="this.src='../images/news-default.jpeg';" class="w-100 newsimg" alt="">
+        <img src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.webp'}" alt="news thumbnail" onerror="this.src='../images/news-default.webp';" class="w-100 newsimg">
         </a>
         <h4 class="title text-white">
         ${newsResponse.articles[i].title.split(' ').length> 5 ? newsResponse.articles[i].title.split(' ').splice(0, 5).join(' ') + '...': newsResponse.articles[i].title}

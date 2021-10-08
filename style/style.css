@@ -127,7 +127,7 @@ small {
 
 .weather-page .bg-img,
 .news-page .bg-img {
-    background-image: url('../images/banner.png');
+    background-image: url('../images/banner.webp');
     background-size: cover;
     min-height: 350px;
     width: 100%;
@@ -400,7 +400,7 @@ li.active-nav>.nav-link {
     vertical-align: middle;
     width: 12px;
     height: 7px;
-    background: url('../images/arrow-gray.png') no-repeat;
+    background: url('../images/arrow-gray.webp') no-repeat;
     margin: 0 10px;
 }
 
