@@ -183,6 +183,7 @@ getWeather();
 
 //News page (second page)
 async function getNews(country) {
+    //09d91d3047984fd9a6a8b3a63d2fd845
     //https://gnews.io/api/v4/search?q=example&country=${country?country:'us'}&token=113d984ca8886fd44b593a3bca50ccbd 
     //${newsResponse.articles[i].image ? newsResponse.articles[i].image : '../images/news-default.jpeg'}
     //newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description)
