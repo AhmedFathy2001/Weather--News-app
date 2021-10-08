@@ -12,6 +12,7 @@
 </head>
 
 <body class="weather-page">
+    <!--bootstrap navbar-->
     <nav class="navbar navbar-expand-lg">
         <div class="container nav-container">
             <div class="navbar-brand d-flex" onclick="window.location.href = 'index.html'">
@@ -21,13 +22,14 @@
                     <small>tagline goes here</small>
                 </div>
             </div>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active" id="weather">
+            <button class="navbar-toggler" onclick="menuActiveToggle(this)" id="btnToggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="menubtn bar1"></span>
+                <span class="menubtn bar2"></span>
+                <span class="menubtn bar3"></span>
+          </button>
+            <div class="collapse navbar-collapse justify-content-lg-end" id="navbarNav">
+                <ul class="navbar-nav mt-5">
+                    <li class="nav-item" id="weather">
                         <a class="nav-link">Home</a>
                     </li>
                     <li class="nav-item" id="news">
@@ -40,12 +42,14 @@
             </div>
         </div>
     </nav>
+    <!-- Search bar for location -->
     <div class="bg-img"></div>
-    <div class="container position-relative d-flex justify-content-center search-container">
+    <div class="container d-flex justify-content-center search-container">
         <input type="search" name="searchbar" class="rounded-pill form-control" id="searchBar">
         <label for="searchBar" class="placeholderr span-animation-selector" id="searchLabel">Search City or Zip Code</label>
     </div>
-    <div class="container" id="weatherPage">
+    <!-- first page (weather/home) -->
+    <div class="container mb-5" id="weatherPage">
         <div class="row">
             <div class="col-md-4 weather" id="firstDay">
 
@@ -58,25 +62,93 @@
             </div>
         </div>
     </div>
+    <!-- second page (news) -->
     <div class="container" id="newsPage">
         <div class="row" id="newsPageRow">
 
         </div>
     </div>
+    <!-- third page (contact) -->
     <div class="container" id="contactPage">
-
+        <!-- Header -->
+        <p class="contact-header rounded-pill">
+            <span class="homelink" onclick="goHome()">Home</span>
+            <span class="text-white">Contact</span>
+        </p>
+        <!-- map section -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 map-style mb-4">
+                    <div class="map mb-3"><iframe class="w-100" height="220" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3411.04971720638!2d29.974886315098768!3d31.247046981460834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f5db8a16c3c77d%3A0x24c465e134255814!2sRoute!5e0!3m2!1sen!2seg!4v1633647617320!5m2!1sen!2seg"
+                            allowfullscreen="" loading="lazy"></iframe></div>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Company Name INC. 2803 Avenue Street, Los Angeles</p>
+                        <p><i class="fas fa-phone-alt"></i><a href="tel:+1-800-314-235"> +1-800-314-235</a></p>
+                        <p><i class="fas fa-envelope"></i><a href="mailto:contact@companyname.com"> contact@companyname.com</a></p>
+                    </div>
+                </div>
+                <!-- contact inputs -->
+                <div class="col-lg-6 offset-lg-1 contact-input">
+                    <h2 class="text-white contact-title">Contact us</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi consectetur inventore ducimus, facilis, numquam id soluta omnis eius recusandae nesciunt vero repellat harum cum. Nisi facilis odit hic, ipsum sed!</p>
+                    <form>
+                        <div class="contact-inputs row">
+                            <div class="name col-md-6 ps-0 ps-md-2 mb-2 position-relative">
+                                <input required class="form-control bg-transparent rounded-pill m-2 input-selector" type="text" name="name" id="name">
+                                <label for="name" class="placeholderr1 span-animation-selector1">Name</label>
+                            </div>
+                            <div class="email col-md-6 position-relative mb-2 ps-0 ps-md-2">
+                                <input required class="form-control bg-transparent rounded-pill m-2 input-selector" type="email" name="email" id="email">
+                                <label for="email" class="placeholderr1 span-animation-selector1">Email</label>
+                            </div>
+                            <div class="company col-md-6 position-relative mb-3 ps-0 ps-md-2">
+                                <input class="form-control bg-transparent rounded-pill m-2 input-selector" type="text" name="company" id="company">
+                                <label for="company" class="placeholderr1 span-animation-selector1">Company</label>
+                            </div>
+                            <div class="website col-md-6 position-relative mb-3 ps-0 ps-md-2">
+                                <input class="form-control bg-transparent rounded-pill m-2 input-selector" type="url" name="website" id="website">
+                                <label for="website" class="placeholderr1 span-animation-selector1">Website</label>
+                            </div>
+                            <div class="desc col-12 position-relative ps-0 ps-md-2">
+                                <textarea required name="desc" id="desc" class="textarea-width bg-transparent form-control" rows="6"></textarea>
+                                <label for="desc" class="textarea-placeholder">Your message for us</label>
+                            </div>
+                            <div class="d-flex justify-content-end my-3">
+                                <button class="btn rounded-pill btn-color text-white" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- subscription input -->
+                <div class="col-lg-8 position-relative mb-3">
+                    <form>
+                        <input required type="email" name="subscribe" id="subscribe" class="form-control rounded-pill m-2 footer-input input-selector">
+                        <label for="subscribe" class="placeholderr1 footer-label span-animation-selector1">Enter your email to subscribe</label>
+                        <button class="btn rounded-pill position-absolute subscribe-btn text-white" type="submit">Subscribe</button>
+                    </form>
+                </div>
+                <!-- social links -->
+                <div class="col-lg-3 offset-lg-1 mb-3 mt-2">
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <p class="copyright">Copyright 2014 Company name. Designed by Themezy. All rights reserved</p>
+            </div>
+        </div>
+    </footer>
     <script src="./scripts/bootstrap.bundle.js" defer></script>
     <script src="./scripts/script.js" defer></script>
 </body>
 
 </html>
-
-<!-- 
-    TODO:
-        1- Footer for the main page
-        2- Fix the navigation buttons
-        3- hook up news API
-        4- link both API's
-        5- Contact Page
--->

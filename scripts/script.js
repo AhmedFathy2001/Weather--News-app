@@ -6,23 +6,58 @@ const search = document.getElementById('searchBar');
 const animationSelector = document.querySelector('label.span-animation-selector');
 const weatherPage = document.getElementById('weatherPage');
 const newsPage = document.getElementById('newsPage');
-const active = document.querySelector('li.nav-item.active a');
+const active = document.querySelector('li.nav-item.active-nav a');
 const news = document.getElementById('news');
 const home = document.getElementById('weather');
 const contact = document.getElementById('contact');
 const searchLabel = document.getElementById('searchLabel');
-const header = document.getElementById('header')
+const header = document.getElementById('header');
+const inputs = document.querySelectorAll('input.input-selector');
+const textareaDesc = document.getElementById('desc');
 const directions = {
     "N": "North",
     "E": "East",
     "W": "West",
     "S": "South"
 }
+const session = sessionStorage.getItem('page') ? sessionStorage.getItem('page') : 'weather';
+const classes = ['weather-page', 'news-page', 'contact-page'];
+
+//Sets the web page on the same page you refreshed on || resets on any other tab (for accurate SPA concept)
+if (session == 'weather') {
+    document.body.classList.remove(...classes);
+    document.body.classList.add('weather-page');
+} else if (session == 'news') {
+    document.body.classList.remove(...classes);
+    document.body.classList.add('news-page');
+    header.innerText = 'news';
+} else {
+    document.body.classList.remove(...classes);
+    document.body.classList.add('contact-page');
+    header.innerText = 'contact';
+}
+
+//Nav bar X animation
+function menuToggle(active) {
+    active.classList.toggle("change");
+}
+
+function menuActiveToggle(active) {
+    active.classList.toggle("active")
+    document.getElementById('btnToggler').classList.toggle("change")
+}
+
+//API to get user's location and set it to the Weather/News api links
+let currentLocation = (async function getLocation() {
+    let location = await fetch('https://ipapi.co/json/');
+    let response = await location.json();
+    return response.city;
+}());
 
 //Search bar for location
 searchBar.addEventListener('keyup', () => {
     placeholderFix();
-    if (home.classList.contains('active')) {
+    if (document.body.classList.contains('weather-page')) {
         getWeather(searchBar.value);
     } else {
         setTimeout(() => {
@@ -31,6 +66,16 @@ searchBar.addEventListener('keyup', () => {
     }
 });
 
+//Input animation for the search bar
+function placeholderFix() {
+    if (searchBar.value == '' || searchBar.value == null) {
+        animationSelector.classList.remove('span-animation');
+    } else {
+        animationSelector.classList.add('span-animation');
+    }
+}
+
+//Event listeners to reset inputs on page change
 news.addEventListener('click', () => {
     searchBar.value = ''
     placeholderFix();
@@ -41,49 +86,31 @@ home.addEventListener('click', () => {
     placeholderFix();
     searchLabel.innerHTML = 'Search City or Zip Code'
 })
+contact.addEventListener('click', () => {
+    inputs.forEach(element => {
+        element.value = '';
+        contactPlaceholder(element)
+    });
+    textareaDesc.value = '';
+    textareaPlaceholder()
+});
 
-//Input animation for the search bar
-function placeholderFix() {
-    if (searchBar.value == '' || searchBar.value == null) {
-        animationSelector.classList.remove('span-animation');
-    } else {
-        animationSelector.classList.add('span-animation');
-    }
-}
-//Navigation selector
-const classes = ['weather-page', 'news-page', 'contact-page']
+
+//Navigation selector (changes title and header according to the standing page)
 document.querySelectorAll('li.nav-item').forEach(el => {
     el.addEventListener('click', () => {
         document.body.classList.remove(...classes);
         document.body.classList.add(`${el.id}-page`);
         header.innerText = `${el.id}`;
+        const str = el.id;
+        const title = str.charAt(0).toUpperCase() + str.slice(1);
+        document.title = title
+        sessionStorage.setItem('page', `${el.id}`)
     })
 })
-const navElements = [home, news, contact]
-navElements.forEach(nav => {
-    nav.addEventListener('click', () => {
-        document.querySelectorAll('.active').forEach(notNav => {
-            notNav.classList.remove('active');
-        });
-        nav.classList.add('active');
-    });
-});
-const x = [{
-        'country': ''
-    }, {
-        'city': ''
-    }]
-    //API to get user's location and set it to the Weather/News api links
-let currentLocation = (async function getLocation() {
-        let location = await fetch('https://ipapi.co/json/');
-        let response = await location.json();
-        // x['country'] = response.country;
-        // x['city'] = response.city;
-        return response.city;
-    }())
-    //Main page content (Weather api call + data displaying)
+
+//Main page content (Weather api call + data displaying)
 async function getWeather(city) {
-    console.log(x['city']);
     let url = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=78d46ef554d74befba3122059210510&q=${city ? city : await currentLocation/* x['city']*/}&days=3&aqi=no&alerts=no`)
     let response = await url.json()
     dayOne.innerHTML = `
@@ -138,16 +165,16 @@ getWeather();
 
 //News page (second page)
 async function getNews(country) {
-    console.log(x['country']);
-    //https://gnews.io/api/v4/search?q=example&country=${country?country:'us'}&token=113d984ca8886fd44b593a3bca50ccbd
-    let newsUrl = await fetch(
-        `https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us' /*await x['country']*/}&topic=news&page_size=18`, {
-            method: "GET",
-            headers: {
-                'x-api-key': 'Ua6VFllK-YGUHaAf1rU_yLK3RIohjhSpjHToM36BYkc'
-            }
+    //https://gnews.io/api/v4/search?q=example&country=${country?country:'us'}&token=113d984ca8886fd44b593a3bca50ccbd 
+    //${newsResponse.articles[i].image ? newsResponse.articles[i].image : '../images/news-default.jpeg'}
+    //newsResponse.articles[i].description.split(' ').length > 15 ? newsResponse.articles[i].description.split(' ').splice(0, 15).join(' ') + '...' : (newsResponse.articles[i].description)
+
+    let newsUrl = await fetch(`https://api.newscatcherapi.com/v2/latest_headlines?countries=${country?country:'us' /*await x['country']*/}&topic=news&lang=en&page_size=18`, {
+        method: "GET",
+        headers: {
+            'x-api-key': 'DBkfmuLb8i0lMy0BBETwAq2GHVPPYIMJhvxwEB9j6oA'
         }
-    );
+    });
     let newsResponse = await newsUrl.json();
     let newsBody = ``;
     let arrayLength = newsResponse.articles.length - (newsResponse.articles.length % 3);
@@ -162,7 +189,7 @@ async function getNews(country) {
         }
         newsBody += `
         <div class="col-md-4" dir="auto">
-        <a target="_blank" href="${newsResponse.articles[i].link}" class="position-relative d-inline-block">
+        <a target="_blank" href="${newsResponse.articles[i].link}" class="position-relative d-inline-block w-100">
         <i class="fas fa-external-link-alt position-absolute"></i>
         <img src="${newsResponse.articles[i].media ? newsResponse.articles[i].media : '../images/news-default.jpeg'}" onerror="this.src='../images/news-default.jpeg';" class="w-100 newsimg" alt="">
         </a>
@@ -174,4 +201,39 @@ async function getNews(country) {
     }
     document.getElementById('newsPageRow').innerHTML = newsBody;
 }
-getNews()
+getNews();
+
+//goes to the home page on click of the link without refreshing the page
+function goHome() {
+    sessionStorage.clear()
+    document.body.classList.remove(...classes);
+    document.body.classList.add('weather-page');
+    header.innerText = 'weather';
+    document.title = 'Weather';
+}
+
+//Contact inputs styling animation
+function contactPlaceholder(element) {
+    if (element.value == '' || element.value == null) {
+        element.nextElementSibling.classList.remove('span-animation1');
+    } else {
+        element.nextElementSibling.classList.add('span-animation1');
+    }
+}
+
+function textareaPlaceholder() {
+    if (textareaDesc.value == '' || textareaDesc.value == null) {
+        textareaDesc.nextElementSibling.classList.remove('textarea-animation');
+    } else {
+        textareaDesc.nextElementSibling.classList.add('textarea-animation');
+    }
+}
+
+textareaDesc.addEventListener('keyup', () => {
+    textareaPlaceholder()
+})
+inputs.forEach(element => {
+    element.addEventListener('keyup', () => {
+        contactPlaceholder(element);
+    })
+})
