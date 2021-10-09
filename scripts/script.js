@@ -15,6 +15,7 @@ const header = document.getElementById('header');
 const inputs = document.querySelectorAll('input.input-selector');
 const textareaDesc = document.getElementById('desc');
 const navBtn = document.getElementById('btnToggler');
+const logo = document.querySelector('.navbar-brand')
 const directions = {
     "N": "North",
     "E": "East",
@@ -24,6 +25,12 @@ const directions = {
 const session = sessionStorage.getItem('page') ? sessionStorage.getItem('page') : 'weather';
 const classes = ['weather-page', 'news-page', 'contact-page'];
 let x = false
+
+//logo click to go home
+logo.addEventListener('click',()=>{
+    sessionStorage.clear();
+    window.location.reload();
+});
 
 //debounce (delays function calls)
 function debounce(func, timeout = 300) {
@@ -96,7 +103,7 @@ function placeholderFix() {
 
 //Event listeners to reset inputs on page change
 news.addEventListener('click', () => {
-    searchBar.value = ''
+    searchBar.value = null;
     placeholderFix();
     searchLabel.innerHTML = 'Search by Country code (us-gb-eg)'
     
@@ -108,7 +115,7 @@ news.addEventListener('click',()=>{
 },{ once: true });
 }
 home.addEventListener('click', () => {
-    searchBar.value = ''
+    searchBar.value = null;
     placeholderFix();
     searchLabel.innerHTML = 'Search City or Zip Code'
 });
