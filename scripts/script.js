@@ -24,7 +24,7 @@ const directions = {
 }
 const session = sessionStorage.getItem('page') ? sessionStorage.getItem('page') : 'weather';
 const classes = ['weather-page', 'news-page', 'contact-page'];
-let x = false
+let x = false;
 
 //logo click to go home
 logo.addEventListener('click',()=>{
